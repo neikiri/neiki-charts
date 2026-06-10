@@ -1,5 +1,5 @@
 {
-  "name": "@neikiri/neiki-charts",
+  "name": "neiki-charts",
   "version": "1.0.0",
   "description": "Lightweight SVG Chart Web Component — zero dependencies, no Canvas, pure SVG",
   "keywords": [
