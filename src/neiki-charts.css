@@ -1,0 +1,386 @@
+/* =============================================================================
+   Neiki's Charts — Design Tokens & Base Styles
+   neiki-charts 1.0.0 | MIT
+   ============================================================================= */
+
+/* =============================================================================
+   2.1  CSS Custom Properties — Light / Dark Themes + Color Palette
+   ============================================================================= */
+
+:host {
+  /* --- Layout ---------------------------------------------------------------- */
+  display: block;
+  box-sizing: border-box;
+  position: relative;
+  width: 100%;
+  height: 100%;
+
+  /* --- Light theme tokens ---------------------------------------------------- */
+  --nc-bg:            #ffffff;
+  --nc-text:          #333333;
+  --nc-grid:          #e5e7eb;
+  --nc-tooltip-bg:    #1f2937;
+  --nc-tooltip-text:  #f9fafb;
+  --nc-border:        #d1d5db;
+  --nc-legend-hover:  #f3f4f6;
+
+  /* --- Chart color palette (10 accessible colors) ---------------------------- */
+  --nc-color-0:  #6366f1;   /* indigo   */
+  --nc-color-1:  #f59e0b;   /* amber    */
+  --nc-color-2:  #10b981;   /* emerald  */
+  --nc-color-3:  #ef4444;   /* red      */
+  --nc-color-4:  #3b82f6;   /* blue     */
+  --nc-color-5:  #8b5cf6;   /* violet   */
+  --nc-color-6:  #ec4899;   /* pink     */
+  --nc-color-7:  #14b8a6;   /* teal     */
+  --nc-color-8:  #f97316;   /* orange   */
+  --nc-color-9:  #84cc16;   /* lime     */
+
+  /* --- Typography ------------------------------------------------------------ */
+  --nc-font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI',
+                    Roboto, Helvetica, Arial, sans-serif;
+  --nc-font-size-sm:  11px;
+  --nc-font-size-base: 12px;
+
+  /* --- Spacing & radius ------------------------------------------------------ */
+  --nc-radius:     4px;
+  --nc-padding:    8px;
+  --nc-legend-gap: 8px;
+}
+
+/* =============================================================================
+   2.2  :host Dark Theme — Shadow DOM Scoping
+   ============================================================================= */
+
+:host([theme="dark"]) {
+  --nc-bg:            #1a1a2e;
+  --nc-text:          #e0e0e0;
+  --nc-grid:          #374151;
+  --nc-tooltip-bg:    #111827;
+  --nc-tooltip-text:  #f9fafb;
+  --nc-border:        #4b5563;
+  --nc-legend-hover:  #1f2937;
+}
+
+/* =============================================================================
+   2.3  @keyframes — Animations (gated by prefers-reduced-motion)
+   ============================================================================= */
+
+@media (prefers-reduced-motion: no-preference) {
+
+  /* Bar chart: scale in from bottom (vertical) or left (horizontal) */
+  @keyframes nc-bar-scale-in {
+    from {
+      transform: scaleY(0);
+      opacity: 0;
+    }
+    to {
+      transform: scaleY(1);
+      opacity: 1;
+    }
+  }
+
+  /* Bar chart horizontal variant: scale in from left */
+  @keyframes nc-bar-scale-in-h {
+    from {
+      transform: scaleX(0);
+      opacity: 0;
+    }
+    to {
+      transform: scaleX(1);
+      opacity: 1;
+    }
+  }
+
+  /* Line chart: stroke draw via dashoffset */
+  @keyframes nc-line-draw {
+    from {
+      stroke-dashoffset: var(--nc-line-length, 2000);
+    }
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
+
+  /* Pie / donut chart: fade-in per slice */
+  @keyframes nc-pie-fade-in {
+    from {
+      opacity: 0;
+      transform: scale(0.85);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  /* Scatter: pop-in for circles */
+  @keyframes nc-dot-pop {
+    from {
+      r: 0;
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  /* --- Animation utility classes ------------------------------------------- */
+
+  .nc-animated .nc-bar-v {
+    transform-origin: bottom center;
+    animation: nc-bar-scale-in 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  }
+
+  .nc-animated .nc-bar-h {
+    transform-origin: left center;
+    animation: nc-bar-scale-in-h 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  }
+
+  .nc-animated .nc-line-path {
+    stroke-dasharray: var(--nc-line-length, 2000);
+    stroke-dashoffset: var(--nc-line-length, 2000);
+    animation: nc-line-draw 0.8s ease-out forwards;
+  }
+
+  .nc-animated .nc-pie-slice {
+    transform-origin: center center;
+    animation: nc-pie-fade-in 0.5s ease-out both;
+  }
+
+  .nc-animated .nc-dot {
+    animation: nc-dot-pop 0.35s ease-out both;
+  }
+
+  /* Stagger bar animations by dataset index */
+  .nc-animated .nc-bar-v:nth-child(1)  { animation-delay: 0.00s; }
+  .nc-animated .nc-bar-v:nth-child(2)  { animation-delay: 0.04s; }
+  .nc-animated .nc-bar-v:nth-child(3)  { animation-delay: 0.08s; }
+  .nc-animated .nc-bar-v:nth-child(4)  { animation-delay: 0.12s; }
+  .nc-animated .nc-bar-v:nth-child(5)  { animation-delay: 0.16s; }
+  .nc-animated .nc-bar-v:nth-child(6)  { animation-delay: 0.20s; }
+  .nc-animated .nc-bar-v:nth-child(7)  { animation-delay: 0.24s; }
+  .nc-animated .nc-bar-v:nth-child(8)  { animation-delay: 0.28s; }
+  .nc-animated .nc-bar-v:nth-child(9)  { animation-delay: 0.32s; }
+  .nc-animated .nc-bar-v:nth-child(10) { animation-delay: 0.36s; }
+
+  /* Stagger pie slices */
+  .nc-animated .nc-pie-slice:nth-child(1)  { animation-delay: 0.00s; }
+  .nc-animated .nc-pie-slice:nth-child(2)  { animation-delay: 0.07s; }
+  .nc-animated .nc-pie-slice:nth-child(3)  { animation-delay: 0.14s; }
+  .nc-animated .nc-pie-slice:nth-child(4)  { animation-delay: 0.21s; }
+  .nc-animated .nc-pie-slice:nth-child(5)  { animation-delay: 0.28s; }
+  .nc-animated .nc-pie-slice:nth-child(6)  { animation-delay: 0.35s; }
+  .nc-animated .nc-pie-slice:nth-child(7)  { animation-delay: 0.42s; }
+  .nc-animated .nc-pie-slice:nth-child(8)  { animation-delay: 0.49s; }
+
+}
+
+/* =============================================================================
+   2.4  Base Styles — Tooltip, Legend, SVG Grid Lines
+   ============================================================================= */
+
+/* --- Host container --------------------------------------------------------- */
+
+:host > svg,
+:host .nc-container > svg {
+  display: block;
+  overflow: visible;
+}
+
+/* nc-container: flex column filling the host */
+.nc-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+}
+
+/* nc-svg-wrap: fills all available vertical space — this is what we measure */
+.nc-svg-wrap {
+  flex: 1 1 0;
+  min-height: 0;
+  width: 100%;
+  overflow: hidden;
+}
+
+.nc-svg-wrap > svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+/* nc-legend-wrap: auto height below the SVG, never affects SVG dimensions */
+.nc-legend-wrap {
+  flex: 0 0 auto;
+  width: 100%;
+}
+
+/* --- SVG grid lines --------------------------------------------------------- */
+
+.nc-grid-line {
+  stroke: var(--nc-grid);
+  stroke-width: 1;
+  stroke-dasharray: 4 4;
+  shape-rendering: crispEdges;
+  pointer-events: none;
+}
+
+.nc-axis-line {
+  stroke: var(--nc-grid);
+  stroke-width: 1;
+  shape-rendering: crispEdges;
+  pointer-events: none;
+}
+
+.nc-axis-label {
+  fill: var(--nc-text);
+  font-family: var(--nc-font-family);
+  font-size: var(--nc-font-size-sm);
+  dominant-baseline: middle;
+  pointer-events: none;
+  user-select: none;
+}
+
+/* --- Tooltip --------------------------------------------------------------- */
+
+.nc-tooltip {
+  position: fixed;
+  z-index: 9999;
+  pointer-events: none;
+
+  background: var(--nc-tooltip-bg);
+  color: var(--nc-tooltip-text);
+  font-family: var(--nc-font-family);
+  font-size: var(--nc-font-size-base);
+  line-height: 1.5;
+
+  padding: 6px 10px;
+  border-radius: var(--nc-radius);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+  max-width: 200px;
+  white-space: nowrap;
+
+  /* Hidden by default; JS sets opacity/visibility */
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.15s ease, visibility 0.15s ease;
+}
+
+.nc-tooltip.nc-tooltip--visible {
+  opacity: 1;
+  visibility: visible;
+}
+
+.nc-tooltip__label {
+  font-weight: 600;
+  margin-bottom: 2px;
+}
+
+.nc-tooltip__value {
+  opacity: 0.85;
+}
+
+/* --- Legend ----------------------------------------------------------------- */
+
+.nc-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--nc-legend-gap);
+  padding: var(--nc-padding) 0 0;
+  list-style: none;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+.nc-legend__item {
+  /* Reset button appearance */
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: none;
+  border: 1px solid transparent;
+  border-radius: var(--nc-radius);
+  padding: 3px 7px;
+  cursor: pointer;
+
+  font-family: var(--nc-font-family);
+  font-size: var(--nc-font-size-base);
+  color: var(--nc-text);
+
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.nc-legend__item:hover,
+.nc-legend__item:focus-visible {
+  background: var(--nc-legend-hover);
+  border-color: var(--nc-border);
+  outline: none;
+}
+
+.nc-legend__item:focus-visible {
+  outline: 2px solid var(--nc-color-0);
+  outline-offset: 1px;
+}
+
+/* Swatch square next to label */
+.nc-legend__swatch {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+/* Hidden dataset: dim the legend item */
+.nc-legend__item[aria-checked="false"] {
+  opacity: 0.4;
+}
+
+/* --- Interactive SVG data elements ----------------------------------------- */
+
+.nc-data-point {
+  cursor: pointer;
+  outline: none;
+}
+
+.nc-data-point:focus-visible {
+  outline: 2px solid var(--nc-color-0);
+  outline-offset: 2px;
+}
+
+/* Subtle highlight on hover for rects */
+.nc-bar:hover,
+.nc-bar:focus-visible {
+  filter: brightness(1.15);
+  outline: none;
+}
+
+/* Subtle highlight on hover for circles */
+.nc-dot:hover,
+.nc-dot:focus-visible {
+  filter: brightness(1.2);
+  r: calc(var(--nc-dot-r, 4px) + 2px);
+}
+
+/* Pie slice hover highlight */
+.nc-pie-slice:hover,
+.nc-pie-slice:focus-visible {
+  filter: brightness(1.15);
+  outline: none;
+}
+
+/* Area fill under line charts */
+.nc-area {
+  pointer-events: none;
+  opacity: 0.15;
+}
+
+/* Line path itself */
+.nc-line-path {
+  fill: none;
+  stroke-width: 2;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}

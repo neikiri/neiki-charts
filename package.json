@@ -1,0 +1,56 @@
+{
+  "name": "@neikiri/neiki-charts",
+  "version": "1.0.0",
+  "description": "Lightweight SVG Chart Web Component — zero dependencies, no Canvas, pure SVG",
+  "keywords": [
+    "chart",
+    "svg",
+    "web-component",
+    "custom-element",
+    "zero-dependencies",
+    "line-chart",
+    "bar-chart",
+    "pie-chart",
+    "scatter-chart"
+  ],
+  "homepage": "https://github.com/neikiri/neiki-charts#readme",
+  "bugs": {
+    "url": "https://github.com/neikiri/neiki-charts/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/neikiri/neiki-charts.git"
+  },
+  "license": "MIT",
+  "author": {
+    "name": "neikiri",
+    "email": "neikiri@neikiri.dev",
+    "url": "https://github.com/neikiri"
+  },
+  "main": "dist/neiki-charts.min.js",
+  "module": "src/neiki-charts.js",
+  "exports": {
+    ".": {
+      "import": "./src/neiki-charts.js",
+      "default": "./dist/neiki-charts.min.js"
+    },
+    "./dist/neiki-charts.min.css": "./dist/neiki-charts.min.css",
+    "./src/neiki-charts.css": "./src/neiki-charts.css"
+  },
+  "files": [
+    "dist/",
+    "src/",
+    "README.md",
+    "CHANGELOG.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "python minify.py"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

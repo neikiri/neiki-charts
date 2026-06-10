@@ -1,0 +1,54 @@
+name: CI
+
+on:
+  push:
+    branches: ["main", "dev"]
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  build:
+    name: Build & validate
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install Python deps
+        run: pip install requests
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install Terser
+        run: npm install -g terser
+
+      - name: Build dist
+        run: python minify.py
+
+      - name: Verify dist outputs exist
+        run: |
+          test -f dist/neiki-charts.min.js || (echo "❌ dist/neiki-charts.min.js missing" && exit 1)
+          test -f dist/neiki-charts.min.css || (echo "❌ dist/neiki-charts.min.css missing" && exit 1)
+          echo "✅ dist artefacts present"
+
+      - name: Check bundle banner
+        run: |
+          head -c 50 dist/neiki-charts.min.js | grep -q "neiki-charts" || \
+            (echo "❌ Version banner missing from bundle" && exit 1)
+          echo "✅ Version banner OK"
+
+      - name: Upload dist artefacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist/
+          retention-days: 7
