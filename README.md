@@ -38,6 +38,10 @@
 
 ---
 
+**Live version:** [https://neikiri.dev/charts](https://neikiri.dev/charts)
+
+---
+
 ## 📖 Overview
 
 Neiki's Charts is a lightweight SVG chart library built as a native Web Component. Drop one `<script>` tag into any HTML page and you get four fully interactive chart types — no build step, no framework, no dependencies.
