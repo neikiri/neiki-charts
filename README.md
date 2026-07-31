@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="assets/img/logo.png" alt="Neiki's Charts" width="620">
+  <img src="assets/img/logo.svg" alt="Neiki's Charts" style="height: 90px; width: auto;">
 </p>
 
 <h1 align="center">Neiki's Charts</h1>
